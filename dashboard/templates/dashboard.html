@@ -173,12 +173,8 @@
 
             <div class="chart-card">
               <div class="chart-title">Evolução Mensal (Qtd)</div>
-              <div class="chart-placeholder" id="chart-producao">
-                <i
-                  class="fas fa-chart-area"
-                  style="font-size: 3rem; color: #ccc"
-                ></i>
-                <p>Gráfico será renderizado aqui</p>
+              <div class="chart-container" style="position: relative; height: 300px; padding: 20px 0;">
+                <canvas id="chart-producao"></canvas>
               </div>
             </div>
           </div>
@@ -293,12 +289,12 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
 
     {{ dados_grafico|json_script:"meus-dados-grafico" }}
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // Teste para ver se os dados estão chegando no console do navegador (F12)
         const elementoGrafico = document.getElementById("meus-dados-grafico");
 
         if (elementoGrafico && elementoGrafico.textContent) {
@@ -306,8 +302,63 @@
             const dadosGrafico = JSON.parse(elementoGrafico.textContent);
             console.log("Dados carregados:", dadosGrafico);
 
-            // Aqui você pode adicionar código para renderizar gráficos
-            // Por exemplo, usando Chart.js ou outra biblioteca
+            if (dadosGrafico && dadosGrafico.length > 0) {
+              // meses e quantidades
+              const meses = dadosGrafico.map(item => item.mes);
+              const quantidades = dadosGrafico.map(item => item.qtd);
+
+
+              const ctx = document.getElementById("chart-producao");
+              if (ctx) {
+                new Chart(ctx, {
+                  type: "line",
+                  data: {
+                    labels: meses,
+                    datasets: [
+                      {
+                        label: "Atendimentos por Mês",
+                        data: quantidades,
+                        borderColor: "#1565c0",
+                        backgroundColor: "rgba(21, 101, 192, 0.1)",
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: "#1565c0",
+                        pointBorderColor: "#fff",
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 7,
+                      },
+                    ],
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        display: true,
+                        position: "top",
+                      },
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        title: {
+                          display: true,
+                          text: "Quantidade de Atendimentos",
+                        },
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: "Mês",
+                        },
+                      },
+                    },
+                  },
+                });
+              }
+            }
           } catch (error) {
             console.error("Erro ao parsear dados do gráfico:", error);
           }
