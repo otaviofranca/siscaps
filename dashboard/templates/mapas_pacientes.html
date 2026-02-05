@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="fas fa-map-marker-alt text-danger"></i> Mapa de Calor: Densidade de Pacientes</h2>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Voltar ao Dashboard</a>
+    </div>
+    
+    <div class="card shadow">
+        <div class="card-body p-0">
+            <div id="map-container" style="width: 100%; height: 75vh;">
+                {{ mapa|safe }}
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            <small>Nota: O mapa baseia-se nos CEPs importados. Regiões mais escuras/vermelhas indicam maior concentração de pacientes.</small>
+        </div>
+    </div>
+</div>
+{% endblock %}

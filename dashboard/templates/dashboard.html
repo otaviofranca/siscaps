@@ -6,17 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SIGCAPS - Dashboard</title>
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}" />
-
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
 
   <body>
@@ -43,67 +35,34 @@
       <aside class="sidebar">
         <h3>Menu</h3>
         <ul class="sidebar-menu">
-          <li>
-            <a href="{% url 'dashboard' %}" class="active">
-              <i class="fas fa-home"></i> Dashboard
-            </a>
-          </li>
-          <li>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#modalImportar">
-              <i class="fas fa-upload"></i> Importar RAAS
-            </a>
-          </li>
-          <li>
-            <a href="#"><i class="fas fa-procedures"></i> Procedimentos</a>
-          </li>
-          <li>
-            <a href="#"><i class="fas fa-bell"></i> Alertas</a>
-          </li>
-          <li>
-            <a href="#"><i class="fas fa-chart-bar"></i> Relatórios</a>
-          </li>
+          <li><a href="{% url 'dashboard' %}" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li><a href="#" data-bs-toggle="modal" data-bs-target="#modalImportar"><i class="fas fa-upload"></i> Importar RAAS</a></li>
+          <li><a href="#"><i class="fas fa-procedures"></i> Procedimentos</a></li>
+          <li><a href="#"><i class="fas fa-bell"></i> Alertas</a></li>
+          <li><a href="#"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
         </ul>
       </aside>
 
       <main class="content">
-        {% if messages %} {% for message in messages %}
-        <div
-          class="alert alert-{{ message.tags }} alert-dismissible fade show"
-          role="alert"
-        >
-          {{ message }}
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="alert"
-            aria-label="Close"
-          ></button>
-        </div>
-        {% endfor %} {% endif %}
+        {% if messages %} 
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %} 
+        {% endif %}
 
         <div id="dashboard" class="tab-content active">
           <div class="tab-header">
             <h2><i class="fas fa-chart-line"></i> Visão Geral</h2>
           </div>
 
-          <div
-            class="cards-grid"
-            style="
-              display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-              gap: 20px;
-              margin-bottom: 30px;
-            "
-          >
+          <div class="cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px;">
             <div class="card">
               <div class="card-header">
                 <div class="card-title">Usuários Ativos</div>
-                <div
-                  class="card-icon"
-                  style="background: #e3f2fd; color: #1565c0"
-                >
-                  <i class="fas fa-users"></i>
-                </div>
+                <div class="card-icon" style="background: #e3f2fd; color: #1565c0"><i class="fas fa-users"></i></div>
               </div>
               <div class="card-value">{{ usuarios_ativos }}</div>
               <div class="card-desc">Pacientes em acompanhamento</div>
@@ -112,12 +71,7 @@
             <div class="card">
               <div class="card-header">
                 <div class="card-title">Situação de Rua</div>
-                <div
-                  class="card-icon"
-                  style="background: #ffebee; color: #c62828"
-                >
-                  <i class="fas fa-bed"></i>
-                </div>
+                <div class="card-icon" style="background: #ffebee; color: #c62828"><i class="fas fa-bed"></i></div>
               </div>
               <div class="card-value">{{ pacientes_rua }}</div>
               <div class="card-desc">População vulnerável</div>
@@ -126,12 +80,7 @@
             <div class="card">
               <div class="card-header">
                 <div class="card-title">Uso de Substâncias</div>
-                <div
-                  class="card-icon"
-                  style="background: #fff3e0; color: #ef6c00"
-                >
-                  <i class="fas fa-wine-bottle"></i>
-                </div>
+                <div class="card-icon" style="background: #fff3e0; color: #ef6c00"><i class="fas fa-wine-bottle"></i></div>
               </div>
               <div class="card-value">{{ pacientes_alcool_droga }}</div>
               <div class="card-desc">Usuários registrados</div>
@@ -140,31 +89,17 @@
 
           <div class="charts-container">
             <div class="chart-card">
-              <div class="chart-title">
-                <i class="fas fa-venus-mars"></i> Perfil por Sexo
-              </div>
-              <div
-                class="d-flex justify-content-center align-items-center"
-                style="height: 200px; padding: 20px"
-              >
+              <div class="chart-title"><i class="fas fa-venus-mars"></i> Perfil por Sexo</div>
+              <div class="d-flex justify-content-center align-items-center" style="height: 300px; padding: 20px">
                 <ul class="list-group list-group-flush w-100">
                   {% for item in dados_sexo %}
-                  <li
-                    class="list-group-item d-flex justify-content-between align-items-center"
-                  >
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>
-                      {% if item.sexo == 'M' or item.sexo == 'MASCULINO' %}
-                      Masculino <i class="fas fa-mars text-primary"></i>
-
-                      {% elif item.sexo == 'F' or item.sexo == 'FEMININO' %}
-                      Feminino <i class="fas fa-venus text-danger"></i>
-
-                      {% else %} {{ item.sexo|default:"Não Informado" }}
-                      {%endif%}
+                      {% if item.sexo == 'M' or item.sexo == 'MASCULINO' %} Masculino <i class="fas fa-mars text-primary"></i>
+                      {% elif item.sexo == 'F' or item.sexo == 'FEMININO' %} Feminino <i class="fas fa-venus text-danger"></i>
+                      {% else %} {{ item.sexo|default:"Não Informado" }} {% endif %}
                     </span>
-                    <span class="badge bg-secondary rounded-pill"
-                      >{{ item.qtd }}</span
-                    >
+                    <span class="badge bg-secondary rounded-pill">{{ item.qtd }}</span>
                   </li>
                   {% endfor %}
                 </ul>
@@ -172,7 +107,7 @@
             </div>
 
             <div class="chart-card">
-              <div class="chart-title">Evolução Mensal (Qtd)</div>
+              <div class="chart-title">Evolução Mensal (Últimos 12 Meses)</div>
               <div class="chart-container" style="position: relative; height: 300px; padding: 20px 0;">
                 <canvas id="chart-producao"></canvas>
               </div>
@@ -181,34 +116,23 @@
 
           <div class="charts-container" style="margin-top: 30px">
             <div class="chart-card">
-              <div class="chart-title">
-                <i class="fas fa-notes-medical"></i> Principais Diagnósticos
-                (CID)
-              </div>
-              <div class="table-container">
+              <div class="chart-title"><i class="fas fa-notes-medical"></i> Principais Diagnósticos (CID)</div>
+              <div class="table-container" style="max-height: 350px; overflow-y: auto;">
                 <table class="table table-sm">
                   <thead>
-                    <tr>
-                      <th>Código CID</th>
-                      <th>Atendimentos</th>
-                    </tr>
+                    <tr><th>Código CID</th><th>Atendimentos</th></tr>
                   </thead>
                   <tbody>
                     {% for item in top_cids %}
                     <tr>
                       <td>
-                        <span class="badge bg-primary">{{ item.cid }}</span>
-                        <br />
-                        <small class="text-muted"
-                          >{{ item.descricao_completa }}</small
-                        >
+                        <span class="badge bg-primary">{{ item.cid }}</span><br />
+                        <small class="text-muted">{{ item.descricao_completa }}</small>
                       </td>
                       <td><strong>{{ item.qtd }}</strong></td>
                     </tr>
                     {% empty %}
-                    <tr>
-                      <td colspan="2">Sem dados de CID.</td>
-                    </tr>
+                    <tr><td colspan="2">Sem dados de CID.</td></tr>
                     {% endfor %}
                   </tbody>
                 </table>
@@ -216,16 +140,24 @@
             </div>
 
             <div class="chart-card">
-              <div class="chart-title">
-                <i class="fas fa-calendar-alt"></i> Frequência de Atendimentos
+              <div class="chart-title d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-map-marked-alt"></i> Concentração Geográfica</span>
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-outline-primary" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#modalMapaAmpliado"
+                  title="Ampliar mapa">
+                  <i class="fas fa-expand-alt"></i> Ampliar
+                </button>
               </div>
-              <div
-                class="d-flex justify-content-center align-items-center"
-                style="height: 200px; padding: 20px"
-              >
-                <p class="text-muted">
-                  Gráfico de frequência de atendimentos será exibido aqui
-                </p>
+              <div class="card-body p-0">
+                <div style="width: 100%; height: 350px; border-radius: 8px; overflow: hidden;">
+                    {{ mapa|safe }}
+                </div>
+              </div>
+              <div class="p-2 bg-light border-top">
+                <small class="text-muted"><i class="fas fa-info-circle"></i> Baseado no CEP de residência.</small>
               </div>
             </div>
           </div>
@@ -233,61 +165,51 @@
       </main>
     </div>
 
+    <div class="modal fade" id="modalMapaAmpliado" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="fas fa-map-marked-alt"></i> Mapa de Concentração Geográfica</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-0">
+            <div style="width: 100%; height: 600px; border-radius: 8px; overflow: hidden;">
+              {{ mapa|safe }}
+            </div>
+          </div>
+          <div class="modal-footer">
+            <small class="text-muted"><i class="fas fa-info-circle"></i> Baseado no CEP de residência dos pacientes.</small>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal fade" id="modalImportar" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Importar Arquivo BPA/RAAS</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-
-          <form
-            action="{% url 'importar_raas' %}"
-            method="POST"
-            enctype="multipart/form-data"
-          >
+          <form action="{% url 'importar_raas' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="modal-body">
               <div class="mb-3">
-                <label for="arquivo_xls" class="form-label"
-                  >Selecione o arquivo (.xls)</label
-                >
-                <input
-                  class="form-control"
-                  type="file"
-                  name="arquivo_xls"
-                  id="arquivo_xls"
-                  accept=".xls,.xlsx"
-                  required
-                />
-                <div class="form-text text-muted">
-                  O sistema irá adicionar os novos dados sem apagar o histórico
-                  existente.
-                </div>
+                <label for="arquivo_xls" class="form-label">Selecione o arquivo (.xls)</label>
+                <input class="form-control" type="file" name="arquivo_xls" id="arquivo_xls" accept=".xls,.xlsx" required />
+                <div class="form-text text-muted">O sistema utilizará o cache de CEP para acelerar a importação.</div>
               </div>
             </div>
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cancelar
-              </button>
-              <button type="submit" class="btn btn-primary">
-                Iniciar Importação
-              </button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Iniciar Importação</button>
             </div>
           </form>
         </div>
       </div>
     </div>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
 
@@ -296,76 +218,37 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const elementoGrafico = document.getElementById("meus-dados-grafico");
-
         if (elementoGrafico && elementoGrafico.textContent) {
           try {
             const dadosGrafico = JSON.parse(elementoGrafico.textContent);
-            console.log("Dados carregados:", dadosGrafico);
-
             if (dadosGrafico && dadosGrafico.length > 0) {
-              // meses e quantidades
               const meses = dadosGrafico.map(item => item.mes);
               const quantidades = dadosGrafico.map(item => item.qtd);
-
-
               const ctx = document.getElementById("chart-producao");
               if (ctx) {
                 new Chart(ctx, {
                   type: "line",
                   data: {
                     labels: meses,
-                    datasets: [
-                      {
-                        label: "Atendimentos por Mês",
+                    datasets: [{
+                        label: "Atendimentos",
                         data: quantidades,
                         borderColor: "#1565c0",
                         backgroundColor: "rgba(21, 101, 192, 0.1)",
                         borderWidth: 2,
                         fill: true,
-                        tension: 0.4,
-                        pointRadius: 5,
-                        pointBackgroundColor: "#1565c0",
-                        pointBorderColor: "#fff",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 7,
-                      },
-                    ],
+                        tension: 0.4
+                    }]
                   },
                   options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                      legend: {
-                        display: true,
-                        position: "top",
-                      },
-                    },
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        title: {
-                          display: true,
-                          text: "Quantidade de Atendimentos",
-                        },
-                      },
-                      x: {
-                        title: {
-                          display: true,
-                          text: "Mês",
-                        },
-                      },
-                    },
-                  },
+                    scales: { y: { beginAtZero: true } }
+                  }
                 });
               }
             }
-          } catch (error) {
-            console.error("Erro ao parsear dados do gráfico:", error);
-          }
-        } else {
-          console.warn(
-            "Elemento 'meus-dados-grafico' não encontrado. Certifique-se de que a variável 'dados_grafico' está sendo passada no contexto do Django.",
-          );
+          } catch (e) { console.error(e); }
         }
       });
     </script>

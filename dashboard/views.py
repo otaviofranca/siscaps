@@ -12,6 +12,9 @@ from dateutil.relativedelta import relativedelta
 from .models import Paciente, Atendimento
 from .cids_data import CID_DICT
 
+import folium
+from folium.plugins import HeatMap
+
 def dashboard_view(request):
     usuarios_ativos = Paciente.objects.filter(ativo=True).count()
     pacientes_rua = Paciente.objects.filter(ativo=True, em_situacao_rua=True).count()
@@ -29,7 +32,6 @@ def dashboard_view(request):
     distribuicao_sexo = Paciente.objects.filter(ativo=True).values('sexo') \
         .annotate(qtd=Count('id')).order_by('sexo')
 
-    # --- CONFIGURAÇÃO DO GRÁFICO (ÚLTIMOS 12 MESES) ---
     hoje = timezone.now().date()
     data_inicio_filtro = hoje.replace(day=1) - relativedelta(months=11)
     
@@ -59,6 +61,28 @@ def dashboard_view(request):
         "dados_sexo": list(distribuicao_sexo)
     }
 
+    pontos = Paciente.objects.filter(latitude__isnull=False, longitude__isnull=False).values_list('latitude', 'longitude')
+    
+    # Cria o mapa interativo focado em Teresina
+    mapa_obj = folium.Map(location=[-5.0892, -42.8016], zoom_start=12, tiles="cartodbpositron")
+    
+    if pontos:
+        HeatMap(pontos).add_to(mapa_obj)
+    
+    # Converte o mapa para HTML
+    mapa_html = mapa_obj._repr_html_()
+
+    # Adicione 'mapa' ao seu dicionário de contexto existente
+    context = {
+        "usuarios_ativos": usuarios_ativos,
+        "pacientes_rua": pacientes_rua,
+        "pacientes_alcool_droga": pacientes_alcool_droga,
+        "top_cids": top_cids,
+        "dados_grafico": dados_formatados,
+        "dados_sexo": list(distribuicao_sexo),
+        "mapa": mapa_html,  # Adicionado aqui
+    }
+
     return render(request, 'dashboard.html', context)
 
 def importar_raas(request):
@@ -81,3 +105,12 @@ def importar_raas(request):
             messages.error(request, f'Erro: {str(e)}')
             
     return redirect('dashboard')
+
+def mapa_calor_view(request):
+    pontos = Paciente.objects.filter(latitude__isnull=False).values_list('latitude', 'longitude')
+    mapa = folium.Map(location=[-5.0892, -42.8016], zoom_start=12, tiles="cartodbpositron")
+    
+    if pontos:
+        HeatMap(pontos).add_to(mapa)
+    
+    return render(request, 'mapa_pacientes.html', {'mapa': mapa._repr_html_()})

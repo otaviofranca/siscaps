@@ -14,6 +14,10 @@ class Paciente(models.Model):
     endereco = models.TextField(blank=True, null=True)
     telefone = models.CharField(max_length=20, blank=True, null=True)
 
+    cep = models.CharField(max_length=9, null=True, blank=True) 
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+
     em_situacao_rua = models.BooleanField(default=False)
     usuario_alcool_drogas = models.BooleanField(default=False)
 
