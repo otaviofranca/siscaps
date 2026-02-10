@@ -13,7 +13,12 @@ from .models import Paciente, Atendimento
 from .cids_data import CID_DICT
 
 import folium
-from folium.plugins import HeatMap
+from folium.plugins import HeatMap 
+
+
+from django.core.paginator import Paginator
+from django.db.models import Q
+from .models import Procedimento # Certifique-se que Procedimento está importado
 
 def dashboard_view(request):
     usuarios_ativos = Paciente.objects.filter(ativo=True).count()
@@ -63,7 +68,7 @@ def dashboard_view(request):
 
     pontos = Paciente.objects.filter(latitude__isnull=False, longitude__isnull=False).values_list('latitude', 'longitude')
     
-    # Cria o mapa interativo focado em Teresina
+    # Cria o mapa interativo focado em teresina
     mapa_obj = folium.Map(location=[-5.0892, -42.8016], zoom_start=12, tiles="cartodbpositron")
     
     if pontos:
@@ -114,3 +119,19 @@ def mapa_calor_view(request):
         HeatMap(pontos).add_to(mapa)
     
     return render(request, 'mapa_pacientes.html', {'mapa': mapa._repr_html_()})
+
+def lista_procedimentos(request):
+    search_query = request.GET.get('busca', '')
+    
+    if search_query:
+        procedimentos = Procedimento.objects.filter(
+            Q(nome__icontains=search_query) | 
+            Q(codigo__icontains=search_query)
+        ).order_by('nome')
+    else:
+        procedimentos = Procedimento.objects.all().order_by('nome')
+
+    return render(request, 'procedimentos.html', {
+        'procedimentos': procedimentos, 
+        'busca': search_query
+    })

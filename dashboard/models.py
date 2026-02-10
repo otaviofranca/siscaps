@@ -27,9 +27,15 @@ class Paciente(models.Model):
         return f"{self.nome} - {self.cns}"
     
 class Procedimento(models.Model):
-    codigo = models.CharField(max_length=10, unique=True)
-    nome = models.CharField(max_length=255)
-    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    # Aumentei o tamanho do código para garantir
+    codigo = models.CharField(max_length=20, unique=True)
+    nome = models.CharField(max_length=500)
+    valor = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    
+    # Novos campos para guardar os detalhes da planilha
+    descricao = models.TextField(null=True, blank=True)
+    cbo = models.TextField(null=True, blank=True)
+    cid = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.codigo} - {self.nome}"
